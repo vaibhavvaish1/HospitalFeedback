@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://plus.unsplash.com/premium_photo-1668487827039-ec0bedd0eb85?q=80&w=1624&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #007BFF;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+        }
+        input, select, textarea, button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                margin: 20px auto;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Hospital Feedback Form</h2>
+        <form id="feedbackForm">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="rating">Overall Rating:</label>
+            <select id="rating" name="rating" required>
+                <option value="">Select</option>
+                <option value="5">Excellent</option>
+                <option value="4">Good</option>
+                <option value="3">Average</option>
+                <option value="2">Fair</option>
+                <option value="1">Poor</option>
+            </select>
+            
+            <label for="feedback">Your Feedback:</label>
+            <textarea id="feedback" name="feedback" required></textarea>
+            
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyApWm2caPM1E0ABc06FyhG7jgfFLbcrg-o",
+          authDomain: "hospitalfeedbackform.firebaseapp.com",
+          projectId: "hospitalfeedbackform",
+          storageBucket: "hospitalfeedbackform.appspot.com",
+          messagingSenderId: "142507250060",
+          appId: "1:142507250060:web:5161a666bb3c3aa5ef86a9",
+          measurementId: "G-VB6KQJNNF2"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Form submission event listener
+        document.getElementById('feedbackForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const rating = document.getElementById('rating').value;
+            const feedback = document.getElementById('feedback').value;
+
+            try {
+                const docRef = await addDoc(collection(db, "feedback"), {
+                    name: name,
+                    email: email,
+                    rating: parseInt(rating),
+                    feedback: feedback,
+                    timestamp: serverTimestamp()
+                });
+                console.log("Feedback submitted with ID: ", docRef.id);
+                alert("Thank you for your feedback!");
+                document.getElementById('feedbackForm').reset();
+            } catch (error) {
+                console.error("Error adding feedback: ", error);
+                alert("An error occurred. Please try again later.");
+            }
+        });
+    </script>
+</body>
+</html>
