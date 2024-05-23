@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
@@ -15,6 +16,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+console.log(gmailEmail, gmailPassword);
+
 exports.sendFeedbackEmail = functions.firestore
     .document("feedback/{feedbackId}")
     .onCreate((snap, context) => {
@@ -25,7 +29,6 @@ exports.sendFeedbackEmail = functions.firestore
         // eslint-disable-next-line max-len
         to: "devvaibhav943@gmail.com", // Change to your recipient email address
         subject: "New Hospital Feedback Received",
-        // eslint-disable-next-line max-len
         text: `Feedback received from ${feedbackData.name} (${feedbackData.email}):
 Rating: ${feedbackData.rating}
 Feedback: ${feedbackData.feedback}`,
@@ -33,6 +36,7 @@ Feedback: ${feedbackData.feedback}`,
 
       return transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
+          console.log("Error", error);
           console.error("Error sending email:", error);
           return;
         }
