@@ -27,7 +27,7 @@ exports.sendFeedbackEmail = functions.firestore
       const mailOptions = {
         from: gmailEmail,
         // eslint-disable-next-line max-len
-        to: "devvaibhav943@gmail.com", // Change to your recipient email address
+        to: "venturesgroup84@gmail.com", // Change to your recipient email address
         subject: "New Hospital Feedback Received",
         text: `Feedback received from ${feedbackData.name} (${feedbackData.email}):
 Rating: ${feedbackData.rating}
